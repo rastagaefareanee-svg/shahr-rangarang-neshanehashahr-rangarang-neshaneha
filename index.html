@@ -1,1 +1,163 @@
 
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شهر رنگارنگ نشانه‌ها</title>
+<style>
+body {
+  font-family: Tahoma, sans-serif;
+  text-align: center;
+  background: linear-gradient(135deg,#fff0c9,#d9f5ff);
+  margin: 0;
+  padding: 20px;
+  color: #444;
+}
+.box {
+  max-width: 450px;
+  margin: 20px auto;
+  padding: 22px;
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 5px 18px #bbb;
+}
+h1 { color: #ed6b91; font-size: 25px; }
+h2 { color: #398cc4; }
+.letter {
+  font-size: 90px;
+  color: #e85c91;
+  margin: 15px;
+}
+button {
+  background: #65c7a3;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 13px 20px;
+  margin: 7px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.answer {
+  display: block;
+  width: 90%;
+  margin: 12px auto;
+  background: #76bce8;
+}
+#message {
+  font-size: 20px;
+  color: #e58b35;
+  min-height: 30px;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h1>🌈 شهر رنگارنگ نشانه‌ها 🌈</h1>
+<h2>بازی آموزشی کلاس اول</h2>
+<p>سلام قهرمان کوچولو! آماده‌ای؟</p>
+
+<div class="letter" id="letter">م</div>
+<p>این نشانه را یاد بگیر و صدایش را بشنو.</p>
+<button onclick="speak()">🔊 شنیدن صدای نشانه</button>
+
+<hr>
+
+<h2 id="question">کدام کلمه با نشانه م شروع می‌شود؟</h2>
+
+<div id="answers">
+<button class="answer" onclick="check('مادر')">مادر</button>
+<button class="answer" onclick="check('سیب')">سیب</button>
+<button class="answer" onclick="check('بابا')">بابا</button>
+<button class="answer" onclick="check('نان')">نان</button>
+</div>
+
+<p id="message"></p>
+<h2>⭐ امتیاز: <span id="score">۰</span></h2>
+<button onclick="nextQuestion()">سؤال بعدی ➡️</button>
+</div>
+
+<script>
+let score = 0;
+let current = 0;
+
+const questions = [
+{
+letter:"م",
+question:"کدام کلمه با نشانه م شروع می‌شود؟",
+answers:["مادر","سیب","بابا","نان"],
+correct:"مادر"
+},
+{
+letter:"س",
+question:"کدام کلمه با نشانه س شروع می‌شود؟",
+answers:["ماه","سیب","توپ","آب"],
+correct:"سیب"
+},
+{
+letter:"ب",
+question:"کدام کلمه با نشانه ب شروع می‌شود؟",
+answers:["نان","باران","ماه","سیب"],
+correct:"باران"
+},
+{
+letter:"آ",
+question:"کدام کلمه با آ شروع می‌شود؟",
+answers:["آب","مادر","سیب","توپ"],
+correct:"آب"
+}
+];
+
+function speak() {
+let text = "نشانه " + questions[current].letter;
+let speech = new SpeechSynthesisUtterance(text);
+speech.lang = "fa-IR";
+speechSynthesis.speak(speech);
+}
+
+function check(answer) {
+if (document.getElementById("message").dataset.done === "yes") return;
+
+if (answer === questions[current].correct) {
+score += 10;
+document.getElementById("message").innerText = "آفرین! پاسخ درست بود! 🌟";
+} else {
+document.getElementById("message").innerText = "تلاش دوباره! تو می‌توانی! 💛";
+}
+
+document.getElementById("score").innerText = score;
+document.getElementById("message").dataset.done = "yes";
+}
+
+function nextQuestion() {
+current++;
+if (current >= questions.length) {
+alert("آفرین قهرمان! امتیاز تو: " + score);
+current = 0;
+score = 0;
+document.getElementById("score").innerText = score;
+}
+
+let q = questions[current];
+document.getElementById("letter").innerText = q.letter;
+document.getElementById("question").innerText = q.question;
+document.getElementById("message").innerText = "";
+document.getElementById("message").dataset.done = "no";
+
+document.getElementById("answers").innerHTML = "";
+
+q.answers.forEach(answer => {
+let button = document.createElement("button");
+button.className = "answer";
+button.innerText = answer;
+button.onclick = () => check(answer);
+document.getElementById("answers").appendChild(button);
+});
+}
+</script>
+
+</body>
+</html>
+
