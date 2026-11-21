@@ -1,163 +1,389 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شهر رنگارنگ نشانه‌ها</title>
+
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Tahoma, sans-serif;
   text-align: center;
-  background: linear-gradient(135deg,#fff0c9,#d9f5ff);
+  background: linear-gradient(135deg,#fff0c9,#d9f5ff,#f9dfff);
   margin: 0;
   padding: 20px;
   color: #444;
 }
+
 .box {
   max-width: 450px;
   margin: 20px auto;
   padding: 22px;
   background: white;
   border-radius: 25px;
-  box-shadow: 0 5px 18px #bbb;
+  box-shadow: 0 5px 20px #aaa;
 }
-h1 { color: #ed6b91; font-size: 25px; }
-h2 { color: #398cc4; }
-.letter {
-  font-size: 90px;
-  color: #e85c91;
+
+h1 {
+  color: #e65b91;
+  font-size: 25px;
+}
+
+h2 {
+  color: #3985cf;
+}
+
+.subtitle {
+  color: #777;
+  line-height: 2;
+}
+
+.stars {
+  background: #fff1a8;
+  padding: 12px;
+  border-radius: 15px;
+  font-size: 20px;
+  margin: 15px 0;
+}
+
+.card {
+  background: #e7f7ff;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 15px 0;
+}
+
+.big {
+  font-size: 65px;
+  color: #e65b91;
   margin: 15px;
 }
+
 button {
-  background: #65c7a3;
-  color: white;
   border: none;
   border-radius: 15px;
-  padding: 13px 20px;
+  padding: 14px;
   margin: 7px;
-  font-size: 18px;
+  font-size: 17px;
+  font-family: Tahoma;
   cursor: pointer;
+  background: #65c8a5;
+  color: white;
 }
-.answer {
-  display: block;
+
+button:active {
+  transform: scale(.96);
+}
+
+.option {
+  background: #8d9be8;
+  width: 42%;
+  font-size: 22px;
+}
+
+.main {
+  background: #f18ab3;
   width: 90%;
-  margin: 12px auto;
-  background: #76bce8;
 }
+
+.sound {
+  background: #ffbd59;
+}
+
 #message {
-  font-size: 20px;
-  color: #e58b35;
-  min-height: 30px;
+  font-size: 19px;
+  font-weight: bold;
+  min-height: 35px;
+  color: #e65b91;
+}
+
+.hidden {
+  display: none;
+}
+
+.footer {
+  color: #999;
+  font-size: 13px;
+  margin-top: 25px;
 }
 </style>
 </head>
+
 <body>
 
 <div class="box">
+
 <h1>🌈 شهر رنگارنگ نشانه‌ها 🌈</h1>
-<h2>بازی آموزشی کلاس اول</h2>
-<p>سلام قهرمان کوچولو! آماده‌ای؟</p>
 
-<div class="letter" id="letter">م</div>
-<p>این نشانه را یاد بگیر و صدایش را بشنو.</p>
-<button onclick="speak()">🔊 شنیدن صدای نشانه</button>
+<p class="subtitle">
+سلام دخترهای گل! 🌷<br>
+به شهر قشنگ نشانه‌ها خوش آمدید.
+</p>
 
-<hr>
-
-<h2 id="question">کدام کلمه با نشانه م شروع می‌شود؟</h2>
-
-<div id="answers">
-<button class="answer" onclick="check('مادر')">مادر</button>
-<button class="answer" onclick="check('سیب')">سیب</button>
-<button class="answer" onclick="check('بابا')">بابا</button>
-<button class="answer" onclick="check('نان')">نان</button>
+<div class="stars">
+⭐ امتیاز شما: <span id="score">۰</span>
 </div>
 
-<p id="message"></p>
-<h2>⭐ امتیاز: <span id="score">۰</span></h2>
-<button onclick="nextQuestion()">سؤال بعدی ➡️</button>
+<div id="home">
+  <div class="card">
+    <div style="font-size:65px">🏫🌳🎈</div>
+    <h2>آماده یادگیری هستی؟</h2>
+    <p>بیا با نشانه‌ها بازی کنیم و ستاره بگیریم!</p>
+  </div>
+  <button class="main" onclick="startGame()">
+    🚀 شروع بازی
+  </button>
+  <button class="sound" onclick="speak('سلام به دخترهای نازنینم، به شهر رنگارنگ نشانه ها خوش آمدید')">
+    🔊 شنیدن خوش‌آمدگویی
+  </button>
+</div>
+
+<div id="game" class="hidden">
+
+  <h2 id="lessonTitle">نشانه را یاد بگیر</h2>
+
+  <div class="card">
+    <div class="big" id="letter">م</div>
+    <p id="example">م مثل مادر ❤️</p>
+    <button class="sound" onclick="speakCurrent()">
+      🔊 صدای نشانه
+    </button>
+  </div>
+
+  <h2 id="question">کدام نشانه اول کلمه است؟</h2>
+
+  <div id="options"></div>
+
+  <p id="message"></p>
+
+  <p>
+    سؤال <span id="number">۱</span>
+    از
+    <span id="total">۸</span>
+  </p>
+
+  <button class="main hidden" id="next" onclick="nextQuestion()">
+    سؤال بعدی 🌸
+  </button>
+
+</div>
+
+<div id="finish" class="hidden">
+  <div style="font-size:65px">🏆🎉🌟</div>
+  <h2>آفرین دختر باهوش!</h2>
+  <p>تو به پایان بازی رسیدی.</p>
+  <div class="stars">
+    امتیاز نهایی: <span id="finalScore">۰</span>
+  </div>
+  <p>تو یک ستاره درخشان هستی! ⭐</p>
+  <button class="main" onclick="restart()">
+    🔄 بازی دوباره
+  </button>
+</div>
+
+<div class="footer">
+طراحی آموزشی ویژه کلاس اول ابتدایی
+<br>
+آموزگار: خانم زهرا رضایی نسب
+</div>
+
 </div>
 
 <script>
-let score = 0;
-let current = 0;
 
 const questions = [
 {
-letter:"م",
-question:"کدام کلمه با نشانه م شروع می‌شود؟",
-answers:["مادر","سیب","بابا","نان"],
-correct:"مادر"
+ letter:"م",
+ example:"م مثل مادر ❤️",
+ word:"مادر",
+ options:["م","س","ب","آ"],
+ answer:"م"
 },
 {
-letter:"س",
-question:"کدام کلمه با نشانه س شروع می‌شود؟",
-answers:["ماه","سیب","توپ","آب"],
-correct:"سیب"
+ letter:"س",
+ example:"س مثل سیب 🍎",
+ word:"سیب",
+ options:["ب","س","آ","م"],
+ answer:"س"
 },
 {
-letter:"ب",
-question:"کدام کلمه با نشانه ب شروع می‌شود؟",
-answers:["نان","باران","ماه","سیب"],
-correct:"باران"
+ letter:"ب",
+ example:"ب مثل بادکنک 🎈",
+ word:"بادکنک",
+ options:["م","آ","ب","س"],
+ answer:"ب"
 },
 {
-letter:"آ",
-question:"کدام کلمه با آ شروع می‌شود؟",
-answers:["آب","مادر","سیب","توپ"],
-correct:"آب"
+ letter:"آ",
+ example:"آ مثل آب 💧",
+ word:"آب",
+ options:["س","ب","آ","م"],
+ answer:"آ"
+},
+{
+ letter:"م",
+ example:"م مثل ماه 🌙",
+ word:"ماه",
+ options:["س","م","ب","آ"],
+ answer:"م"
+},
+{
+ letter:"س",
+ example:"س مثل سبزه 🌱",
+ word:"سبزه",
+ options:["آ","ب","س","م"],
+ answer:"س"
+},
+{
+ letter:"ب",
+ example:"ب مثل بابا ❤️",
+ word:"بابا",
+ options:["ب","م","آ","س"],
+ answer:"ب"
+},
+{
+ letter:"آ",
+ example:"آ مثل آسمان ☁️",
+ word:"آسمان",
+ options:["م","س","آ","ب"],
+ answer:"آ"
 }
 ];
 
-function speak() {
-let text = "نشانه " + questions[current].letter;
-let speech = new SpeechSynthesisUtterance(text);
-speech.lang = "fa-IR";
-speechSynthesis.speak(speech);
+let current = 0;
+let score = 0;
+let answered = false;
+
+function speak(text) {
+  if (!("speechSynthesis" in window)) {
+    alert("صدای فارسی در این مرورگر پشتیبانی نمی‌شود.");
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  let msg = new SpeechSynthesisUtterance(text);
+  msg.lang = "fa-IR";
+  msg.rate = 0.8;
+
+  speechSynthesis.speak(msg);
 }
 
-function check(answer) {
-if (document.getElementById("message").dataset.done === "yes") return;
-
-if (answer === questions[current].correct) {
-score += 10;
-document.getElementById("message").innerText = "آفرین! پاسخ درست بود! 🌟";
-} else {
-document.getElementById("message").innerText = "تلاش دوباره! تو می‌توانی! 💛";
+function startGame() {
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  current = 0;
+  score = 0;
+  loadQuestion();
 }
 
-document.getElementById("score").innerText = score;
-document.getElementById("message").dataset.done = "yes";
+function loadQuestion() {
+
+  answered = false;
+
+  let q = questions[current];
+
+  document.getElementById("letter").innerText = q.letter;
+  document.getElementById("example").innerText = q.example;
+  document.getElementById("lessonTitle").innerText =
+    "نشانه " + q.letter;
+
+  document.getElementById("question").innerText =
+    "کلمه «" + q.word + "» با کدام نشانه شروع می‌شود؟";
+
+  document.getElementById("number").innerText =
+    current + 1;
+
+  document.getElementById("total").innerText =
+    questions.length;
+
+  document.getElementById("message").innerText = "";
+
+  document.getElementById("next").classList.add("hidden");
+
+  document.getElementById("score").innerText = score;
+
+  let html = "";
+
+  q.options.forEach(option => {
+    html += `<button class="option"
+    onclick="checkAnswer('${option}',this)">
+    ${option}
+    </button>`;
+  });
+
+  document.getElementById("options").innerHTML = html;
+}
+
+function speakCurrent() {
+  let q = questions[current];
+  speak(q.letter + ". " + q.example);
+}
+
+function checkAnswer(answer, button) {
+
+  if (answered) return;
+
+  answered = true;
+
+  if (answer === questions[current].answer) {
+
+    score += 10;
+
+    document.getElementById("message").innerText =
+      "آفرین! جواب درست است! ⭐🌸";
+
+    speak("آفرین دختر گلم! پاسخ درست است.");
+
+  } else {
+
+    document.getElementById("message").innerText =
+      "اشکالی ندارد! دوباره یاد می‌گیریم ❤️";
+
+    speak("اشکالی ندارد، تلاش خوبی بود.");
+
+  }
+
+  document.getElementById("score").innerText = score;
+
+  document.getElementById("next").classList.remove("hidden");
 }
 
 function nextQuestion() {
-current++;
-if (current >= questions.length) {
-alert("آفرین قهرمان! امتیاز تو: " + score);
-current = 0;
-score = 0;
-document.getElementById("score").innerText = score;
+
+  current++;
+
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    finishGame();
+  }
 }
 
-let q = questions[current];
-document.getElementById("letter").innerText = q.letter;
-document.getElementById("question").innerText = q.question;
-document.getElementById("message").innerText = "";
-document.getElementById("message").dataset.done = "no";
+function finishGame() {
 
-document.getElementById("answers").innerHTML = "";
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("finish").classList.remove("hidden");
 
-q.answers.forEach(answer => {
-let button = document.createElement("button");
-button.className = "answer";
-button.innerText = answer;
-button.onclick = () => check(answer);
-document.getElementById("answers").appendChild(button);
-});
+  document.getElementById("finalScore").innerText = score;
+
+  speak("تبریک می گویم! تو بازی شهر رنگارنگ نشانه ها را تمام کردی.");
 }
+
+function restart() {
+
+  document.getElementById("finish").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+
+  document.getElementById("score").innerText = "۰";
+
+}
+
 </script>
 
 </body>
 </html>
-
